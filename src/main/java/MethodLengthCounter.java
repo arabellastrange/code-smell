@@ -1,15 +1,16 @@
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-public class MethodLengthCounter extends VoidVisitorAdapter<Integer> {
+public class MethodLengthCounter extends VoidVisitorAdapter<List<Integer>> {
     private static final Logger log = Logger.getLogger(MethodParameterCounter.class.getName());
 
     @Override
-    public void visit(MethodDeclaration md, Integer count) {
-        super.visit(md, count);
+    public void visit(MethodDeclaration md, List<Integer> methodLengths) {
+        super.visit(md, methodLengths);
         final AtomicInteger methodSize = new AtomicInteger();
 
         md.getBody().ifPresent(b -> {
@@ -20,6 +21,6 @@ public class MethodLengthCounter extends VoidVisitorAdapter<Integer> {
             }
         });
 
-        count = methodSize.get();
+        methodLengths.add(methodSize.get());
     }
 }
