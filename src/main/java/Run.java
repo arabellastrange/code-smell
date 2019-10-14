@@ -10,7 +10,9 @@ public class Run {
     //TODO automate scan and adding files in path
     private static final String[] FILE_PATHS = new String[] {"src/main/java/testcode/Bloaters/Grid.java", "src/main/java/testcode/FalsePositives/BoxingTheCompass.java",
             "src/main/java/testcode/Abusers/RefusedBequest/Account.java", "src/main/java/testcode/Abusers/RefusedBequest/ChqAcc.java",
-            "src/main/java/testcode/Abusers/RefusedBequest/SavingsAcc.java", "src/main/java/testcode/Abusers/BarnsleyFernTwo.java"};
+            "src/main/java/testcode/Abusers/RefusedBequest/SavingsAcc.java", "src/main/java/testcode/Abusers/BarnsleyFernTwo.java",
+            "src/main/java/testcode/Couplers/MessageChains/Child.java", "src/main/java/testcode/Couplers/MessageChains/Client.java",
+            "src/main/java/testcode/Couplers/MessageChains/Intermediate.java", "src/main/java/testcode/Couplers/MessageChains/Parent.java"};
 
     private static final Logger log = Logger.getLogger(Run.class.getName());
 
@@ -28,9 +30,13 @@ public class Run {
                 VoidVisitor<Integer> methodLengthCounter = new MethodLengthCounter();
                 VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
 
+                VoidVisitor<?> methodChainDetector = new MessageChainDetection();
+
                 methodParameterCounter.visit(cu, null);
                 methodLengthCounter.visit(cu, count);
                 classLengthCounter.visit(cu, null);
+
+                methodChainDetector.visit(cu, null);
             }
 
         } catch (FileNotFoundException e) {
