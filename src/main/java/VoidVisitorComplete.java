@@ -18,6 +18,7 @@ public class VoidVisitorComplete {
 
         VoidVisitor<?> methodNameVisitor = new MethodNamePrinter();
         methodNameVisitor.visit(cu, null);
+
         List<String> methodNames = new ArrayList<>();
         VoidVisitor<List<String>> methodNameCollector = new MethodNameCollector();
         methodNameCollector.visit(cu, methodNames);

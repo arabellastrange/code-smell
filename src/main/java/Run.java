@@ -7,26 +7,35 @@ import java.util.logging.Logger;
 
 public class Run {
 
-    private static final String[] FILE_PATHS = new String[] {"src/main/java/testcode/Bloaters/Grid.java", "src/main/java/testcode/FalsePositives/BoxingTheCompass.java"};
+    //TODO automate scan and adding files in path
+    private static final String[] FILE_PATHS = new String[] {"src/main/java/testcode/Bloaters/Grid.java", "src/main/java/testcode/FalsePositives/BoxingTheCompass.java",
+            "src/main/java/testcode/Abusers/RefusedBequest/Account.java", "src/main/java/testcode/Abusers/RefusedBequest/ChqAcc.java",
+            "src/main/java/testcode/Abusers/RefusedBequest/SavingsAcc.java", "src/main/java/testcode/Abusers/BarnsleyFernTwo.java"};
+
     private static final Logger log = Logger.getLogger(Run.class.getName());
 
     public static void main(String[] args) {
+        analyseFiles();
+    }
+
+    private static void analyseFiles() {
+        Integer count = 0;
         try {
             for(String FILE_PATH : FILE_PATHS){
                 log.info("Analysing class: " +  FILE_PATH.substring(FILE_PATH.lastIndexOf('/') + 1));
                 CompilationUnit cu = StaticJavaParser.parse(new FileInputStream(FILE_PATH));
                 VoidVisitor<?> methodParameterCounter = new MethodParameterCounter();
-                VoidVisitor<?> methodLengthCounter = new MethodLengthCounter();
+                VoidVisitor<Integer> methodLengthCounter = new MethodLengthCounter();
                 VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
 
                 methodParameterCounter.visit(cu, null);
-                methodLengthCounter.visit(cu, null);
+                methodLengthCounter.visit(cu, count);
+                classLengthCounter.visit(cu, null);
             }
 
         } catch (FileNotFoundException e) {
             log.warning("File not found: " + e);
         }
-
     }
 }
 
