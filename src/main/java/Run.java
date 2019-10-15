@@ -27,17 +27,17 @@ public class Run {
     private static void analyseFiles() {
         try {
             for (String FILE_PATH : FILE_PATHS) {
-                methodLengths.clear(); // clear list of method lengths for every new file processed
+
                 log.info("Analysing class: " + FILE_PATH.substring(FILE_PATH.lastIndexOf('/') + 1));
                 CompilationUnit cu = StaticJavaParser.parse(new FileInputStream(FILE_PATH));
                 VoidVisitor<?> methodParameterCounter = new MethodParameterCounter();
-                VoidVisitor<List<Integer>> methodLengthCounter = new MethodLengthCounter();
+                VoidVisitor<?> methodLengthCounter = new MethodLengthCounter();
                 VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
 
                 VoidVisitor<?> methodChainDetector = new MessageChainDetection();
 
                 methodParameterCounter.visit(cu, null);
-                methodLengthCounter.visit(cu, methodLengths);
+                methodLengthCounter.visit(cu, null);
                 classLengthCounter.visit(cu, null);
 
                 methodChainDetector.visit(cu, null);

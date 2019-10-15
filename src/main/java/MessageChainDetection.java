@@ -13,7 +13,7 @@ public class MessageChainDetection extends VoidVisitorAdapter<Void> {
         Optional scope = mc.getScope();
         String name = mc.getNameAsString();
 
-        //log.info("Method Call: " + scope + " - " + name);
+        log.info("Method Call: " + scope + " - " + name);
 
         if(scope.toString().contains("().")){
             log.warning("Method With Message Chain: " + name);
