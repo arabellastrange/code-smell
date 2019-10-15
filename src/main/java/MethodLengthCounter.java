@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-public class MethodLengthCounter extends VoidVisitorAdapter<List<Integer>> {
+public class MethodLengthCounter extends VoidVisitorAdapter<Void> {
     private static final Logger log = Logger.getLogger(MethodParameterCounter.class.getName());
 
     @Override
-    public void visit(MethodDeclaration md, List<Integer> methodLengths) {
-        super.visit(md, methodLengths);
+    public void visit(MethodDeclaration md, Void count) {
+        super.visit(md, count);
         final AtomicInteger methodSize = new AtomicInteger();
 
         md.getBody().ifPresent(b -> {
@@ -20,7 +20,5 @@ public class MethodLengthCounter extends VoidVisitorAdapter<List<Integer>> {
                 log.warning("Method " + md.getName() + " is too long, maximum recommended number of statements is 15.");
             }
         });
-
-        methodLengths.add(methodSize.get());
     }
 }
