@@ -11,11 +11,12 @@ import java.util.logging.Logger;
 public class Run {
 
     //TODO automate scan and adding files in path
-    private static final String[] FILE_PATHS = new String[]{"src/main/java/testcode/Bloaters/Grid.java", "src/main/java/testcode/FalsePositives/BoxingTheCompass.java",
-            "src/main/java/testcode/Abusers/RefusedBequest/Account.java", "src/main/java/testcode/Abusers/RefusedBequest/ChqAcc.java",
-            "src/main/java/testcode/Abusers/RefusedBequest/SavingsAcc.java", "src/main/java/testcode/Abusers/BarnsleyFernTwo.java",
-            "src/main/java/testcode/Couplers/MessageChains/Child.java", "src/main/java/testcode/Couplers/MessageChains/Client.java",
-            "src/main/java/testcode/Couplers/MessageChains/Intermediate.java", "src/main/java/testcode/Couplers/MessageChains/Parent.java"};
+    //, "src/main/java/testcode/FalsePositives/BoxingTheCompass.java",
+    //            "src/main/java/testcode/Abusers/RefusedBequest/Account.java", "src/main/java/testcode/Abusers/RefusedBequest/ChqAcc.java",
+    //            "src/main/java/testcode/Abusers/RefusedBequest/SavingsAcc.java", "src/main/java/testcode/Abusers/BarnsleyFernTwo.java",
+    //            "src/main/java/testcode/Couplers/MessageChains/Child.java", "src/main/java/testcode/Couplers/MessageChains/Client.java",
+    //            "src/main/java/testcode/Couplers/MessageChains/Intermediate.java", "src/main/java/testcode/Couplers/MessageChains/Parent.java"
+    private static final String[] FILE_PATHS = new String[]{"src/main/java/testcode/Bloaters/Grid.java"};
 
     private static final Logger log = Logger.getLogger(Run.class.getName());
     private static List<Integer> methodLengths = new ArrayList<>();

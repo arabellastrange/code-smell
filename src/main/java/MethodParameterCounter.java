@@ -11,9 +11,6 @@ public class MethodParameterCounter extends VoidVisitorAdapter<Void> {
         super.visit(md, arg);
         int methodParameterCount = md.getParameters().size();
 
-        //for debugging
-        //log.info("Method Argument Count: " + methodParameterCount);
-
         if(methodParameterCount > 4){
             log.warning("Method " + md.getName() + " uses too many parameter, maximum recommended number of parameters is 4.");
         }

@@ -38,7 +38,7 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
         for (ConstructorDeclaration c : constructors) {
             totalConstructorLength += c.getBody().getStatements().size();
         }
-
+        log.info("Class " + cd.getName() + " has " + totalConstructorLength + " constructors.");
         return totalConstructorLength;
     }
 
@@ -55,8 +55,6 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
 
         methods.forEach(m -> log.info("The methods of this class are " + m.getName()));
 
-        //gather the length of all the methods in the class
-        List<Integer> methodLengths = new ArrayList<>();
         for (MethodDeclaration md : methods) {
             if (md.getBody().isPresent()) {
                 totalMethodLength += md.getBody().get().getStatements().size();
