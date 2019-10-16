@@ -10,25 +10,23 @@ public class MessageChainDetection extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(MethodCallExpr mc, Void count) {
-        //TODO fix character counting
         Optional scope = mc.getScope();
+        String scopeString = scope.toString();
         String name = mc.getNameAsString();
         ArrayList<Character> chars = new ArrayList<Character>();
-        //log.info("Method Call: " + scope + " - " + name);
+
 
         //if more than 2 method calls, raise warning
-        for(int i = 0; i < scope.toString().length(); i++){
-            final char c = scope.toString().charAt(i);
+        for(int i = 0; i < scopeString.length(); i++){
+            final char c = scopeString.charAt(i);
             if(c == '.'){
                 chars.add(c);
             }
         }
 
-        if(chars.size() > 2){
-            log.warning("Method With Message Chain: " + name);
+        if(chars.size() > 1){
+            log.warning("Method " + name + " contains a message chain.");
         }
-//        if(scope.toString().contains("().")){
-//            log.warning("Method With Message Chain: " + name);
-//        }
+
     }
 }
