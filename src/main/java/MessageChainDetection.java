@@ -16,6 +16,7 @@ public class MessageChainDetection extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(MethodCallExpr mc, Void count) {
+        //TODO warning method doesn't actually give method name
         Optional scope = mc.getScope();
         String scopeString = scope.toString();
         String name = mc.getNameAsString();
@@ -23,15 +24,17 @@ public class MessageChainDetection extends VoidVisitorAdapter<Void> {
 
 
         //if more than 2 method calls, raise warning
-        for(int i = 0; i < scopeString.length(); i++){
+        for(int i = 0; i < scopeString.length()-1; i++){
             final char c = scopeString.charAt(i);
-            if(c == '.'){
+            final char d = scopeString.charAt(i+1);
+
+            if(c == '.' && !Character.isDigit(d)){
                 chars.add(c);
             }
         }
 
-        if(chars.size() > 1){
-            log.warning("Method " + name + " in " + mc.getClass().getCanonicalName() + " contains a message chain.");
+        if(chars.size() > 2){
+            log.warning("Method " + name + " contains a message chain.");
         }
 
     }
