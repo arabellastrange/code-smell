@@ -4,7 +4,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,7 +21,6 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
         classLength += getMethodsLength(cd);
         classLength += getFieldsLength(cd);
         classLength += getConstructorsLength(cd);
-        ;
 
         log.info("Class " + cd.getName() + " has " + classLength + " lines.");
 
@@ -44,16 +42,16 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
 
     private int getFieldsLength(ClassOrInterfaceDeclaration cd) {
         List<FieldDeclaration> fields = cd.getFields();
-        log.info("This class has " + fields.size() + " fields in class ");
+        log.info("Class " + cd.getName() + " has " + fields.size() + " fields in class ");
         return fields.size();
     }
 
     private int getMethodsLength(ClassOrInterfaceDeclaration cd) {
         int totalMethodLength = 0;
         List<MethodDeclaration> methods = cd.getMethods();
-        log.info("This class has " + methods.size() + " methods in class ");
+        log.info("Class " + cd.getName() + "has " + methods.size() + " methods in class ");
 
-        methods.forEach(m -> log.info("The methods of this class are " + m.getName()));
+        methods.forEach(m -> log.info("The methods of "+ cd.getName()+" are " + m.getName()));
 
         for (MethodDeclaration md : methods) {
             if (md.getBody().isPresent()) {
