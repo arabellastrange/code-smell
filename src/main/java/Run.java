@@ -38,8 +38,8 @@ public class Run {
                 VoidVisitor<?> methodChainDetector = new MessageChainDetection();
 
                 //methodParameterCounter.visit(cu, null);
-                methodLengthCounter.visit(cu, null);
-                classLengthCounter.visit(cu, null);
+                //methodLengthCounter.visit(cu, null);
+                //classLengthCounter.visit(cu, null);
                 dataClassDetection.visit(cu, null);
                 //methodChainDetector.visit(cu, null);
             }
