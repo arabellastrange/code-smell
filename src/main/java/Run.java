@@ -36,13 +36,15 @@ public class Run {
                 VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
                 VoidVisitor<?> dataClassDetection = new DataClassDetection();
                 VoidVisitor<?> methodChainDetector = new MessageChainDetection();
+                VoidVisitor<?> featureEnvyDetector = new FeatureEnvyDetection();
                 VoidVisitor<?> middleManDetector = new MiddleManDetection();
 
-                //methodParameterCounter.visit(cu, null);
-                //methodLengthCounter.visit(cu, null);
-                //classLengthCounter.visit(cu, null);
-                //dataClassDetection.visit(cu, null);
-                //methodChainDetector.visit(cu, null);
+                methodParameterCounter.visit(cu, null);
+                methodLengthCounter.visit(cu, null);
+                classLengthCounter.visit(cu, null);
+                dataClassDetection.visit(cu, null);
+                methodChainDetector.visit(cu, null);
+                featureEnvyDetector.visit(cu, null);
                 middleManDetector.visit(cu, null);
             }
 
