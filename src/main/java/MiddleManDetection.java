@@ -2,6 +2,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import helpers.ClassHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
