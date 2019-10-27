@@ -1,6 +1,7 @@
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import helpers.FileToCompilation;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -12,14 +13,14 @@ import java.util.logging.Logger;
 
 public class Run {
 
-    private static final String direcotry = "src/main/java/testcode/";
+    private static final String DIRECTORY = "src/main/java/testcode/";
     private static List<File> files = new ArrayList<>();
 
     private static final Logger log = Logger.getLogger(Run.class.getName());
 
     public static void main(String[] args) {
-        Iterator it = FileUtils.iterateFiles(new File(direcotry), null, true);
-        log.info("Loaded directory: " + direcotry);
+        Iterator it = FileUtils.iterateFiles(new File(DIRECTORY), null, true);
+        log.info("Loaded directory: " + DIRECTORY);
 
         while (it.hasNext()) {
             files.add((File) it.next());
@@ -29,6 +30,7 @@ public class Run {
 
     private static void analyseFiles(List<File> files) {
         List<CompilationUnit> units = new ArrayList<>();
+
         for (File file : files) {
             try {
                 CompilationUnit cu = StaticJavaParser.parse(file);
@@ -37,7 +39,13 @@ public class Run {
                 log.warning("File not found exception: " + e.getMessage());
             }
         }
+
+        initializeMap(files, units);
         callSmellDetectors(units);
+    }
+
+    private static void initializeMap(List<File> files, List<CompilationUnit> units) {
+        new FileToCompilation(files, units);
     }
 
     private static void callSmellDetectors(List<CompilationUnit> units) {
@@ -58,6 +66,7 @@ public class Run {
             refusedBequestDetector.visit(cu, null);
         }
     }
+
 }
 
 

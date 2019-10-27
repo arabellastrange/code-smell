@@ -5,8 +5,11 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import helpers.ClassCollector;
+import helpers.FileToCompilation;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class RefusedBequestDetection extends VoidVisitorAdapter<Void> {
@@ -25,14 +28,15 @@ public class RefusedBequestDetection extends VoidVisitorAdapter<Void> {
         classCollector.visit(cu, classOrInterfaceDeclarations);
         ClassOrInterfaceDeclaration superClass;
 
-        for(ClassOrInterfaceDeclaration cd : classOrInterfaceDeclarations){
+        for (ClassOrInterfaceDeclaration cd : classOrInterfaceDeclarations) {
             if (!cd.isInterface() && !cd.getExtendedTypes().isEmpty()) {
                 //make sure class inherits something first
                 extension = cd.getExtendedTypes().get(0);
-                log.info("Extension Class: " + extension.asString());
-                if(cu.getClassByName(extension.asString()).isPresent()){
+                log.info("Extension Class: " + extension.getNameAsString());
+                Optional<CompilationUnit> superUnit = FileToCompilation.getCompilationUnitByName(extension.getNameAsString());
+                if (superUnit.isPresent()) {
                     log.info("Getting methods of the super class.... ");
-                     superClass = cu.getClassByName(extension.asString()).get();
+                    superClass = superUnit.get().getClassByName(extension.getNameAsString()).get();
                     compareMethodsOfEachClass(superClass.getMethods(), cd.getMethods());
                 }
             }
@@ -42,6 +46,7 @@ public class RefusedBequestDetection extends VoidVisitorAdapter<Void> {
     }
 
     private void compareMethodsOfEachClass(List<MethodDeclaration> superMethods, List<MethodDeclaration> classMethods) {
-        //todo
+        log.info("Super methods: " + superMethods.toString());
+        log.info("Class Methods: " + classMethods.toString());
     }
 }
