@@ -1,12 +1,8 @@
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import helpers.LocalVariableCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +13,32 @@ public class FeatureEnvyDetection extends VoidVisitorAdapter<Void> {
 
     private static final Logger log = Logger.getLogger(FeatureEnvyDetection.class.getName());
     private List<FieldDeclaration> fields = new ArrayList<>();
+    private ClassOrInterfaceDeclaration classOrInterfaceDeclaration;
 
     @Override
-    public void visit(ClassOrInterfaceDeclaration cd, Void count){
-        super.visit(cd, count);
+    public void visit(ClassOrInterfaceDeclaration cd, Void count) {
         log.info("Calling FeatureEnvyDetection on " + cd.getName());
-
+        super.visit(cd, count);
+        classOrInterfaceDeclaration = cd;
         fields = cd.getFields();
 
+        visitMethods(cd.getMethods());
     }
 
-    private void visitMethods(List<MethodDeclaration> methodDeclarations){
-        methodDeclarations.forEach(methodDeclaration -> {
-            List<VariableDeclarationExpr> localVariables = new ArrayList<>();
-            VoidVisitor<List<VariableDeclarationExpr>> localVariableCollector = new LocalVariableCollector();
+    private void visitMethods(List<MethodDeclaration> methodDeclarations) {
 
-            localVariableCollector.visit(methodDeclaration, localVariables);
-            visitMethod(methodDeclaration.getParameters(), localVariables);
-        });
+        for (MethodDeclaration methodDeclaration : methodDeclarations) {
+            List<Node> inClassStatements = new ArrayList<>();
+            methodDeclaration.getBody().ifPresent(bd -> bd.getStatements().forEach(
+                    statement -> statement
+                            .getChildNodes()
+                            .forEach(child -> child.getChildNodes().forEach(c -> {
+                                        log.info("child node: " + c.getChildNodes());
+                                        inClassStatements.addAll(c.findAll(classOrInterfaceDeclaration.getClass()));
+                                    })
+                            )
+            ));
+            log.info("Local nodes: " + inClassStatements.toString());
+        }
     }
-
-    private void visitMethod(NodeList<Parameter> parameters, List<VariableDeclarationExpr> localVariables) {
-        //todo
-    }
-
 }
