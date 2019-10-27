@@ -5,8 +5,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import helpers.ClassCollector;
-
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
