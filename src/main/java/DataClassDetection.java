@@ -3,6 +3,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import helpers.ClassHelper;
@@ -26,7 +27,7 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
 
         log.info("Calling DataClassDetection on " + cd.getName());
 
-        if(!cd.isInterface() || !ClassHelper.isExceptionClass(cd)){
+        if(!cd.isInterface() && !ClassHelper.isExceptionClass(cd) && !cd.isEmpty()){
             List<MethodDeclaration> methods = cd.getMethods();
             log.info("Class" + cd.getName() + " has " + methods.size() + " methods in class ");
             methods.forEach(method -> log.info("The methods of " + cd.getName() + " are " + method.getName()));
@@ -60,8 +61,20 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
         for (Statement st : statements) {
             if (st.isExpressionStmt()) {
                 Expression expression = (st.asExpressionStmt()).getExpression();
-                if (expression instanceof AssignExpr || expression instanceof NameExpr) {
-                    // nothing
+                if (expression instanceof AssignExpr || expression instanceof NameExpr){
+                    AssignExpr.Operator operator = expression.asAssignExpr().getOperator();
+                    if(operator.equals(AssignExpr.Operator.ASSIGN)){
+                        //nothing
+                    } else {
+                        functionalStatements.add(st);
+                    }
+                } else {
+                    functionalStatements.add(st);
+                }
+            } else if(st.isReturnStmt()){
+                Expression expression = st.asReturnStmt().getExpression().get();
+                if(expression.isLiteralExpr()){
+                    //nothing
                 } else {
                     functionalStatements.add(st);
                 }
