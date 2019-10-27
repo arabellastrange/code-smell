@@ -39,13 +39,7 @@ public class Run {
 //                VoidVisitor<?> methodChainDetector = new MessageChainDetection();
                 // VoidVisitor<?> middleManDetector = new MiddleManDetection();
                 VoidVisitor<?> refusedBequestDetector = new RefusedBequestDetection();
-                VoidVisitor<?> methodParameterCounter = new MethodParameterCounter();
-                VoidVisitor<?> methodLengthCounter = new MethodLengthCounter();
-                VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
-                VoidVisitor<?> dataClassDetection = new DataClassDetection();
-                VoidVisitor<?> messageChainDetector = new MessageChainDetection();
-                VoidVisitor<?> featureEnvyDetector = new FeatureEnvyDetection();
-                VoidVisitor<?> middleManDetector = new MiddleManDetection();
+                // VoidVisitor<?> middleManDetector = new MiddleManDetection();
 
 //                methodParameterCounter.visit(cu, null);
 //                methodLengthCounter.visit(cu, null);
@@ -54,13 +48,6 @@ public class Run {
 //                methodChainDetector.visit(cu, null);
                 //middleManDetector.visit(cu, null);
                 refusedBequestDetector.visit(cu, null);
-                methodParameterCounter.visit(cu, null);
-                methodLengthCounter.visit(cu, null);
-                classLengthCounter.visit(cu, null);
-                dataClassDetection.visit(cu, null);
-                messageChainDetector.visit(cu, null);
-                featureEnvyDetector.visit(cu, null);
-                middleManDetector.visit(cu, null);
             }
 
         } catch (FileNotFoundException e) {
