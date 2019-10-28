@@ -2,8 +2,10 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -24,9 +26,9 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
 
         log.info("Class " + cd.getName() + " has " + classLength + " lines.");
 
-        if (classLength > 50) {
+        if (classLength > 80) {
             log.warning("Class " + cd.getName() + " has " + classLength + " lines.");
-            log.warning("Class  " + cd.getName() + " is too long, maximum recommended number of statements is 50.");
+            log.warning("Class  " + cd.getName() + " is too long, maximum recommended number of statements is 80.");
         }
     }
 
@@ -51,12 +53,14 @@ public class ClassLengthCounter extends VoidVisitorAdapter<Void> {
         List<MethodDeclaration> methods = cd.getMethods();
         log.info("Class " + cd.getName() + "has " + methods.size() + " methods in class ");
 
-        methods.forEach(m -> log.info("The methods of "+ cd.getName()+" are " + m.getName()));
+        methods.forEach(m -> log.info("The methods of " + cd.getName() + " are " + m.getName()));
 
         for (MethodDeclaration md : methods) {
-            if (md.getBody().isPresent()) {
-                totalMethodLength += md.getBody().get().getStatements().size();
-            }
+            List<Integer> length = new ArrayList<>();
+            VoidVisitor<List<Integer>> methodLengthCounter = new MethodLengthCounter();
+            methodLengthCounter.visit(md, length);
+            log.info("method length " + length);
+            totalMethodLength += length.get(0);
         }
         return totalMethodLength;
     }
