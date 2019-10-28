@@ -36,9 +36,15 @@ public class MiddleManDetection extends VoidVisitorAdapter<Void> {
             if (m.getBody().isPresent()) {
                 List<Statement> statements = m.getBody().get().getStatements();
                 List<Statement> usefulStatements = filterUsefulStatements(statements);
-                if (!usefulStatements.isEmpty()) {
+                String typeString = m.getType().toString();
+                if(statements.size() > 1){
+                    usefulMethods.add(m);
+                }else if (!usefulStatements.isEmpty()) {
+                    usefulMethods.add(m);
+                }else if(typeString.contains("String") || typeString.contains("void") || typeString.contains("double") || typeString.contains("int") || typeString.contains("boolean")){
                     usefulMethods.add(m);
                 }
+
             }
         });
         return usefulMethods;
@@ -47,8 +53,10 @@ public class MiddleManDetection extends VoidVisitorAdapter<Void> {
     public List<Statement> filterUsefulStatements(List<Statement> statements){
         List<Statement> usefulStatements = new ArrayList<>();
         for(Statement s : statements){
-            if(s.isExpressionStmt() || s.isAssertStmt()){
+            if(s.isExpressionStmt() || s.isAssertStmt() || s.isForEachStmt() || s.isForStmt() || s.isIfStmt() || s.isSwitchStmt() || s.isTryStmt() || s.isThrowStmt()){
                 usefulStatements.add(s);
+            }else if (s.isReturnStmt()){
+
             }
         }
         return usefulStatements;
