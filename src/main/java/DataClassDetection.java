@@ -27,14 +27,12 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
         log.info("Calling DataClassDetection on " + cd.getName());
 
         if (!cd.isInterface() && !ClassHelper.isExceptionClass(cd) && !cd.isEmpty()) {
-            List<MethodDeclaration> methods = cd.getMethods();
-            log.info("Class" + cd.getName() + " has " + methods.size() + " methods in class ");
-            methods.forEach(method -> log.info("The methods of " + cd.getName() + " are " + method.getName()));
-
-            List<MethodDeclaration> functionalMethods = filterGetterOrSetterMethods(methods);
-
-            if (functionalMethods.isEmpty()) {
-                log.warning("This class " + cd.getName() + " contains no logic, only data access methods");
+            if(!cd.getMethods().isEmpty()){
+                List<MethodDeclaration> functionalMethods = filterGetterOrSetterMethods(cd.getMethods());
+                log.info("In main call functional methods are " + functionalMethods.size());
+                if (functionalMethods.isEmpty()) {
+                    log.warning("This class " + cd.getName() + " contains no logic, only data access methods");
+                }
             }
         }
 
@@ -52,7 +50,7 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
                 }
             }
         });
-
+        log.info("Number of functional methods: " + functionalMethods.size());
         return functionalMethods;
     }
 
@@ -72,6 +70,7 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
                 }
             }
         }
+        log.info("Number of functional statements for methods: " + functionalStatements.size());
         return functionalStatements;
     }
 
@@ -90,15 +89,8 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
                 return false;
             }
         } else if (statement.isReturnStmt()) {
-            Expression expression = statement.asReturnStmt().getExpression().get();
-            log.info("Return statement: " + expression.toString());
-            if (expression.isLiteralExpr()) {
-                return true;
-            } else {
-                return false;
-            }
+            return true;
         } else {
-            log.info("Other Statement: " + statement.toString());
             return true;
         }
     }

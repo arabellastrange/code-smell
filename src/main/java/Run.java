@@ -62,10 +62,10 @@ public class Run {
 
 
 //            methodParameterCounter.visit(cu, null);
-            methodLengthCounter.visit(cu, methodSize);
-            classLengthCounter.visit(cu, null);
-//            dataClassDetection.visit(cu, null);
-            methodChainDetector.visit(cu, null);
+//            methodLengthCounter.visit(cu, methodSize);
+//            classLengthCounter.visit(cu, null);
+            dataClassDetection.visit(cu, null);
+//            methodChainDetector.visit(cu, null);
 //            middleManDetector.visit(cu, null);
 //            refusedBequestDetector.visit(cu, null);
         }
