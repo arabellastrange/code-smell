@@ -39,7 +39,6 @@ public class MessageChainDetection extends VoidVisitorAdapter<Void> {
 //        }
 
         if (scope.toString().contains(").") && !scope.toString().contains("new ")) {
-            System.out.println("Class: " + name + " -- " + scope);
             log.warning("Method With Message Chain: " + name);
         }
     }

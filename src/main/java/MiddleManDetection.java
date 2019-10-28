@@ -41,10 +41,7 @@ public class MiddleManDetection extends VoidVisitorAdapter<Void> {
                     usefulMethods.add(m);
                 }else if (!usefulStatements.isEmpty()) {
                     usefulMethods.add(m);
-                }else if(typeString.contains("String") || typeString.contains("void") || typeString.contains("double") || typeString.contains("int") || typeString.contains("boolean")){
-                    usefulMethods.add(m);
                 }
-
             }
         });
         return usefulMethods;
