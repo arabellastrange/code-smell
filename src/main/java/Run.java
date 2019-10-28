@@ -50,15 +50,16 @@ public class Run {
 
     private static void callSmellDetectors(List<CompilationUnit> units) {
         for (CompilationUnit cu : units) {
-//            VoidVisitor<?> methodParameterCounter = new MethodParameterCounter();
+            VoidVisitor<?> methodParameterCounter = new MethodParameterCounter();
             VoidVisitor<?> methodLengthCounter = new MethodLengthCounter();
-//            VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
-//            VoidVisitor<?> dataClassDetection = new DataClassDetection();
-//            VoidVisitor<?> methodChainDetector = new MessageChainDetection();
-//            VoidVisitor<?> middleManDetector = new MiddleManDetection();
-//            VoidVisitor<?> refusedBequestDetector = new RefusedBequestDetection();
+            VoidVisitor<?> classLengthCounter = new ClassLengthCounter();
+            VoidVisitor<?> dataClassDetection = new DataClassDetection();
+            VoidVisitor<?> methodChainDetector = new MessageChainDetection();
+            VoidVisitor<?> middleManDetector = new MiddleManDetection();
+            VoidVisitor<?> refusedBequestDetector = new RefusedBequestDetection();
+
 //            methodParameterCounter.visit(cu, null);
-            methodLengthCounter.visit(cu, null);
+//            methodLengthCounter.visit(cu, null);
 //            classLengthCounter.visit(cu, null);
 //            dataClassDetection.visit(cu, null);
 //            methodChainDetector.visit(cu, null);
