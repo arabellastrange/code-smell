@@ -3,7 +3,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import helpers.ClassHelper;
@@ -27,14 +26,15 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
 
         log.info("Calling DataClassDetection on " + cd.getName());
 
-        if(!cd.isInterface() && !ClassHelper.isExceptionClass(cd) && !cd.isEmpty()){
+        if (!cd.isInterface() && !ClassHelper.isExceptionClass(cd) && !cd.isEmpty()) {
             List<MethodDeclaration> methods = cd.getMethods();
             log.info("Class" + cd.getName() + " has " + methods.size() + " methods in class ");
             methods.forEach(method -> log.info("The methods of " + cd.getName() + " are " + method.getName()));
 
             List<MethodDeclaration> functionalMethods = filterGetterOrSetterMethods(methods);
+
             if (functionalMethods.isEmpty()) {
-                log.warning("This class " + cd.getName() + " contains no logic, only data retrieval methods");
+                log.warning("This class " + cd.getName() + " contains no logic, only data access methods");
             }
         }
 
@@ -59,29 +59,48 @@ public class DataClassDetection extends VoidVisitorAdapter<Void> {
     private List<Statement> filterSetterOrGetterStatements(List<Statement> statements) {
         List<Statement> functionalStatements = new ArrayList<>();
         for (Statement st : statements) {
-            if (st.isExpressionStmt()) {
-                Expression expression = (st.asExpressionStmt()).getExpression();
-                if (expression instanceof AssignExpr || expression instanceof NameExpr){
-                    AssignExpr.Operator operator = expression.asAssignExpr().getOperator();
-                    if(operator.equals(AssignExpr.Operator.ASSIGN)){
-                        //nothing
-                    } else {
-                        functionalStatements.add(st);
+            if (st.isBlockStmt()) {
+                for (Statement statement : st.asBlockStmt().getStatements()) {
+                    if (!isSetterOrGetterStatement(statement)) {
+                        functionalStatements.add(statement);
                     }
-                } else {
-                    functionalStatements.add(st);
                 }
-            } else if(st.isReturnStmt()){
-                Expression expression = st.asReturnStmt().getExpression().get();
-                if(expression.isLiteralExpr()){
-                    //nothing
-                } else {
+            } else {
+                st.toBlockStmt();
+                if (!isSetterOrGetterStatement(st)) {
                     functionalStatements.add(st);
                 }
             }
         }
-
         return functionalStatements;
+    }
+
+    private boolean isSetterOrGetterStatement(Statement statement) {
+        if (statement.isExpressionStmt()) {
+            Expression expression = (statement.asExpressionStmt()).getExpression();
+            if (expression instanceof AssignExpr || expression instanceof NameExpr) {
+                log.info("Assign statement or name statement: " + expression.toString());
+                AssignExpr.Operator operator = expression.asAssignExpr().getOperator();
+                if (operator.equals(AssignExpr.Operator.ASSIGN)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if (statement.isReturnStmt()) {
+            Expression expression = statement.asReturnStmt().getExpression().get();
+            log.info("Return statement: " + expression.toString());
+            if (expression.isLiteralExpr()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            log.info("Other Statement: " + statement.toString());
+            return true;
+        }
     }
 
 }

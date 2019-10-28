@@ -16,7 +16,7 @@ public class MiddleManDetection extends VoidVisitorAdapter<Void> {
     private static final Logger log = Logger.getLogger(MethodParameterCounter.class.getName());
 
     public void visit(ClassOrInterfaceDeclaration cd, Void arg){
-        if(!cd.isInterface() || !ClassHelper.isExceptionClass(cd)){
+        if(!cd.isInterface() && !ClassHelper.isExceptionClass(cd) && !cd.isEmpty()){
             List<MethodDeclaration> methods = cd.getMethods();
 
             if(!methods.isEmpty()) {
